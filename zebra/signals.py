@@ -11,11 +11,14 @@ V1
 - zebra_webhook_subscription_ping_sent
 
 v2
-
+- zebra_webhook_account_updated
+- zebra_webhook_account_application_deauthorized
 - zebra_webhook_charge_succeeded
 - zebra_webhook_charge_failed
 - zebra_webhook_charge_refunded
-- zebra_webhook_charge_disputed
+- zebra_webhook_charge_dispute_created
+- zebra_webhook_charge_dispute_updated
+- zebra_webhook_charge_dispute_closed
 - zebra_webhook_customer_created
 - zebra_webhook_customer_updated
 - zebra_webhook_customer_deleted
@@ -37,9 +40,9 @@ v2
 - zebra_webhook_plan_updated
 - zebra_webhook_plan_deleted
 - zebra_webhook_coupon_created
-- zebra_webhook_coupon_updated
 - zebra_webhook_coupon_deleted
 - zebra_webhook_transfer_created
+- zebra_webhook_transfer_updated
 - zebra_webhook_transfer_failed
 - zebra_webhook_ping
 """
@@ -57,10 +60,14 @@ zebra_webhook_subscription_ping_sent = django.dispatch.Signal(providing_args=[])
 # v2 webhooks
 WEBHOOK2_ARGS = ["full_json"]
 
+zebra_webhook_account_updated = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
+zebra_webhook_account_application_deauthorized = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_charge_succeeded = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_charge_failed = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_charge_refunded = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
-zebra_webhook_charge_disputed = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
+zebra_webhook_charge_dispute_created = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
+zebra_webhook_charge_dispute_updated = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
+zebra_webhook_charge_dispute_closed = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_customer_created = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_customer_updated = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_customer_deleted = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
@@ -82,17 +89,21 @@ zebra_webhook_plan_created = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS
 zebra_webhook_plan_updated = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_plan_deleted = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_coupon_created = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
-zebra_webhook_coupon_updated = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_coupon_deleted = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_transfer_created = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
+zebra_webhook_transfer_updated = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_transfer_failed = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 zebra_webhook_ping = django.dispatch.Signal(providing_args=WEBHOOK2_ARGS)
 
 WEBHOOK_MAP = {
+    'account_updated': zebra_webhook_account_updated,
+    'account_application_deauthorized': zebra_webhook_account_application_deauthorized,
     'charge_succeeded': zebra_webhook_charge_succeeded,
     'charge_failed': zebra_webhook_charge_failed,
     'charge_refunded': zebra_webhook_charge_refunded,
-    'charge_disputed': zebra_webhook_charge_disputed,
+    'charge_dispute_created': zebra_webhook_charge_dispute_created,
+    'charge_dispute_updated': zebra_webhook_charge_dispute_updated,
+    'charge_dispute_closed': zebra_webhook_charge_dispute_closed,
     'customer_created': zebra_webhook_customer_created,
     'customer_updated': zebra_webhook_customer_updated,
     'customer_deleted': zebra_webhook_customer_deleted,
@@ -114,9 +125,9 @@ WEBHOOK_MAP = {
     'plan_updated': zebra_webhook_plan_updated,
     'plan_deleted': zebra_webhook_plan_deleted,
     'coupon_created': zebra_webhook_coupon_created,
-    'coupon_updated': zebra_webhook_coupon_updated,
     'coupon_deleted': zebra_webhook_coupon_deleted,
     'transfer_created': zebra_webhook_transfer_created,
+    'transfer_updated': zebra_webhook_transfer_updated,
     'transfer_failed': zebra_webhook_transfer_failed,
     'ping': zebra_webhook_ping,
 }
